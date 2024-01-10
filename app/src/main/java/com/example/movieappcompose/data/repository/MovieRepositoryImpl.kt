@@ -1,20 +1,21 @@
 package com.example.movieappcompose.data.repository
 
 import com.example.movieappcompose.data.local.MovieDatabase
+import com.example.movieappcompose.data.mapper.toMedia
 import com.example.movieappcompose.data.mapper.toMovie
 import com.example.movieappcompose.data.mapper.toMovieEntity
 import com.example.movieappcompose.data.remote.MovieApi
+import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.model.Movie
 import com.example.movieappcompose.domain.repository.MovieRepository
+import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.Resource
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import okio.IOException
 import retrofit2.HttpException
@@ -104,6 +105,35 @@ class MovieRepositoryImpl @Inject constructor(
                 send(Resource.Loading(false))
             }
 
+        }
+    }
+
+    override suspend fun getTrendingMovieList(
+        type: String,
+        time: String,
+        page: Int,
+    ): Flow<Resource<List<Media>>> {
+        return flow {
+
+            emit(Resource.Loading(true))
+
+
+                val trendingMovieList =  try {
+                    movieApi.getTrendingMovie(type, time, page)
+                } catch (e: IOException) {
+                    emit(Resource.Error(e.localizedMessage!!))
+                    return@flow
+                } catch (e: HttpException) {
+                    emit(Resource.Error(e.localizedMessage!!))
+                    return@flow
+                }
+            emit(
+                Resource.Success(
+                    trendingMovieList.results.map { mediaDto ->
+                        mediaDto.toMedia(mediaDto.media_type ?: "", Constant.TRENDING)
+                    }
+                )
+            )
         }
     }
 }

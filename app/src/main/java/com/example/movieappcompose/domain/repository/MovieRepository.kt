@@ -1,5 +1,6 @@
 package com.example.movieappcompose.domain.repository
 
+import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.model.Movie
 import com.example.movieappcompose.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -16,5 +17,11 @@ interface MovieRepository {
     suspend fun getMovieListById(
         id: Int
     ): Flow<Resource<Movie>>
+
+    suspend fun getTrendingMovieList(
+        type: String,
+        time: String,
+        page: Int,
+    ): Flow<Resource<List<Media>>>
 
 }

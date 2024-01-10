@@ -1,7 +1,9 @@
 package com.example.movieappcompose.data.mapper
 
 import com.example.movieappcompose.data.local.MovieEntity
+import com.example.movieappcompose.data.remote.MediaDto
 import com.example.movieappcompose.data.remote.MovieDto
+import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.model.Movie
 
 
@@ -56,4 +58,40 @@ fun MovieEntity.toMovie(
         vote_count = vote_count,
         category = category
     )
+
 }
+
+fun MediaDto.toMedia(
+    type: String,
+    category: String,
+): Media {
+    return Media(
+        backdropPath = backdrop_path ?: "",
+        originalLanguage = original_language ?: "",
+        overview = overview ?: "",
+        posterPath = poster_path ?: "",
+        releaseDate = release_date ?: "",
+        title = title ?: name ?: "",
+        voteAverage = vote_average ?: 0.0,
+        popularity = popularity ?: 0.0,
+        voteCount = vote_count ?: 0,
+        genreIds = genre_ids ?: emptyList(),
+        id = id ?: 1,
+        adult = adult ?: false,
+        mediaType = type,
+        category = category,
+        originCountry = origin_country ?: emptyList(),
+        originalTitle = original_title ?: original_name ?: "",
+        runtime = null,
+        status = null,
+        tagline = null,
+        videos = videos,
+        similarMediaList = similarMediaList ?: emptyList()
+    )
+}
+
+
+
+
+
+

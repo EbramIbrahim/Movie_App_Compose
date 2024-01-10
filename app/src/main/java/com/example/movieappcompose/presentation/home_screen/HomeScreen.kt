@@ -26,7 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.movieappcompose.domain.model.BottomNavItems
 import com.example.movieappcompose.presentation.MovieViewModel
 import com.example.movieappcompose.presentation.UpcomingScreen
-import com.example.movieappcompose.presentation.popular_screen.PopularScreen
+import com.example.movieappcompose.presentation.home_screen.MainScreenSection
+import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.Screens
 
 
@@ -92,11 +93,7 @@ fun HomeScreen(navHostController: NavHostController) {
                 startDestination = Screens.PopularMovieList.rout
             ) {
                 composable(route = Screens.PopularMovieList.rout) {
-                    PopularScreen(
-                        navController = navHostController,
-                        movieState = movieState,
-                        onEvent = viewModel::onEvent
-                    )
+                    MainScreenSection(movieState = movieState)
                 }
 
                 composable(route = Screens.UpcomingMovieList.rout) {

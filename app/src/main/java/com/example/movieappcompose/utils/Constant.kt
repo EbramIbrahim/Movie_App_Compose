@@ -8,5 +8,11 @@ object Constant {
 
     const val POPULAR = "popular"
     const val UPCOMING = "upcoming"
+    const val TRENDING = "trending"
+    const val TIME = "day"
+    const val ALL = "all"
+    const val trendingAllListScreen = "trendingAllListScreen"
+    const val tvSeriesScreen = "tvSeriesScreen"
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.movieappcompose.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappcompose.domain.repository.MovieRepository
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieViewModel @Inject constructor(
     private val repository: MovieRepository
-): ViewModel() {
+) : ViewModel() {
 
 
     private val _movieState: MutableStateFlow<MovieState> =
@@ -27,13 +28,12 @@ class MovieViewModel @Inject constructor(
     val movieState = _movieState.asStateFlow()
 
     init {
-      onEvent(MovieEvent.InitialProcesses)
+        onEvent(MovieEvent.InitialProcesses)
     }
 
 
-
     fun onEvent(event: MovieEvent) {
-        when(event) {
+        when (event) {
             is MovieEvent.GetMovieListFromRemote -> {
                 if (event.category == Constant.POPULAR) {
                     getPopularMovieList(true)
@@ -43,12 +43,13 @@ class MovieViewModel @Inject constructor(
             }
 
             MovieEvent.InitialProcesses -> {
-                getPopularMovieList(false)
-                getUpcomingMovieList(false)
+//                getPopularMovieList(false)
+//                getUpcomingMovieList(false)
+                getTrendingMovieList()
+
             }
         }
     }
-
 
 
     private fun getPopularMovieList(shouldFetchFromRemote: Boolean) {
@@ -58,13 +59,15 @@ class MovieViewModel @Inject constructor(
                 page = _movieState.value.popularMoviePage,
                 shouldFetchFromRemote = shouldFetchFromRemote
             ).collectLatest { result ->
-                when(result) {
+                when (result) {
                     is Resource.Error -> {
-                        _movieState.update { it.copy(error = result.message , isLoading = false) }
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
                     }
+
                     is Resource.Loading -> {
                         _movieState.update { it.copy(isLoading = result.isLoading) }
                     }
+
                     is Resource.Success -> {
                         result.data?.let { popularMovie ->
                             _movieState.update {
@@ -90,13 +93,15 @@ class MovieViewModel @Inject constructor(
                 page = _movieState.value.upcomingMoviePage,
                 shouldFetchFromRemote = shouldFetchFromRemote
             ).collectLatest { result ->
-                when(result) {
+                when (result) {
                     is Resource.Error -> {
                         _movieState.update { it.copy(error = result.message) }
                     }
+
                     is Resource.Loading -> {
                         _movieState.update { it.copy(isLoading = result.isLoading) }
                     }
+
                     is Resource.Success -> {
                         result.data?.let { upcomingMovie ->
                             _movieState.update {
@@ -114,7 +119,30 @@ class MovieViewModel @Inject constructor(
     }
 
 
+    private fun getTrendingMovieList() {
+        viewModelScope.launch {
+            repository.getTrendingMovieList(
+                type = Constant.ALL,
+                time = Constant.TIME,
+                page = 1
+            ).collectLatest { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
+                    }
+                    is Resource.Loading -> {
+                        _movieState.update { it.copy(isLoading = true) }
 
+                    }
+                    is Resource.Success -> {
+                        result.data?.let { media ->
+                            _movieState.update { it.copy(trendingMovieList = media, isLoading = false) }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
 }
