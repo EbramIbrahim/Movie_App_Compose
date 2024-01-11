@@ -1,4 +1,4 @@
-package com.example.movieappcompose.presentation.common
+package com.example.movieappcompose.presentation.home_screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,8 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.movieappcompose.domain.model.BottomNavItems
 import com.example.movieappcompose.presentation.MovieViewModel
 import com.example.movieappcompose.presentation.UpcomingScreen
-import com.example.movieappcompose.presentation.home_screen.MainScreenSection
-import com.example.movieappcompose.utils.Constant
+import com.example.movieappcompose.presentation.common.BottomNavBar
 import com.example.movieappcompose.utils.Screens
 
 

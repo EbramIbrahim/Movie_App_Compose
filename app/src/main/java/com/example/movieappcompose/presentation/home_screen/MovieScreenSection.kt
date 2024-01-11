@@ -40,7 +40,16 @@ fun MovieScreenSection(
         else -> ""
     }
 
-    val mediaList = movieState.trendingMovieList.take(10)
+    val mediaList = when(type) {
+        Constant.trendingAllListScreen -> {
+            movieState.trendingMovieList.take(10)
+        }
+        Constant.tvSeriesScreen -> {
+            movieState.topRatedSeriesList.take(10)
+        }
+
+        else -> emptyList()
+    }
 
 
 

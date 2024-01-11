@@ -27,12 +27,20 @@ fun MainScreenSection(
         MovieScreenSection(
             type = Constant.trendingAllListScreen,
             movieState = movieState,
-
             )
 
         Spacer(modifier = Modifier.height(16.dp))
         
         AutoSwipeSection(movieState = movieState)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        MovieScreenSection(
+            type = Constant.tvSeriesScreen,
+            movieState = movieState
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
     }
 

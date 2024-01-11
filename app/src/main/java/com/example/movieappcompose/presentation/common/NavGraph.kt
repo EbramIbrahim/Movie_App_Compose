@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.movieappcompose.presentation.details_screen.DetailsScreen
+import com.example.movieappcompose.presentation.home_screen.HomeScreen
 import com.example.movieappcompose.utils.Screens
 
 

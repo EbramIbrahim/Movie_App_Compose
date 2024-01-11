@@ -13,7 +13,6 @@ interface MovieRepository {
          shouldFetchFromRemote: Boolean
     ): Flow<Resource<List<Movie>>>
 
-
     suspend fun getMovieListById(
         id: Int
     ): Flow<Resource<Movie>>
@@ -23,5 +22,12 @@ interface MovieRepository {
         time: String,
         page: Int,
     ): Flow<Resource<List<Media>>>
+
+    suspend fun getTopRatedSeries(
+        type: String,
+        category: String,
+        page: Int
+    ): Flow<Resource<List<Media>>>
+
 
 }

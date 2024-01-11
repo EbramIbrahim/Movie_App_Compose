@@ -116,17 +116,18 @@ class MovieRepositoryImpl @Inject constructor(
         return flow {
 
             emit(Resource.Loading(true))
+            delay(1000L)
 
 
-                val trendingMovieList =  try {
-                    movieApi.getTrendingMovie(type, time, page)
-                } catch (e: IOException) {
-                    emit(Resource.Error(e.localizedMessage!!))
-                    return@flow
-                } catch (e: HttpException) {
-                    emit(Resource.Error(e.localizedMessage!!))
-                    return@flow
-                }
+            val trendingMovieList = try {
+                movieApi.getTrendingMovie(type, time, page)
+            } catch (e: IOException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            } catch (e: HttpException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            }
             emit(
                 Resource.Success(
                     trendingMovieList.results.map { mediaDto ->
@@ -136,16 +137,40 @@ class MovieRepositoryImpl @Inject constructor(
             )
         }
     }
+
+
+    override suspend fun getTopRatedSeries(
+        type: String,
+        category: String,
+        page: Int
+    ): Flow<Resource<List<Media>>> {
+        return flow {
+
+            emit(Resource.Loading(true))
+            delay(1000L)
+
+            val topRatedSeries = try {
+                movieApi.getTopRatedSeries(
+                    type, category, page
+                )
+            } catch (e: IOException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            } catch (e: HttpException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            }
+
+            emit(Resource.Success(
+                topRatedSeries.results.map {
+                    it.toMedia(type = it.media_type ?: "", category = category)
+                })
+            )
+
+
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
 
 
 

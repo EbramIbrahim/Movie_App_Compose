@@ -1,6 +1,5 @@
 package com.example.movieappcompose.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappcompose.domain.repository.MovieRepository
@@ -43,10 +42,10 @@ class MovieViewModel @Inject constructor(
             }
 
             MovieEvent.InitialProcesses -> {
-//                getPopularMovieList(false)
-//                getUpcomingMovieList(false)
+//              getPopularMovieList(false)
+//              getUpcomingMovieList(false)
                 getTrendingMovieList()
-
+                getTopRatedSeries()
             }
         }
     }
@@ -130,13 +129,47 @@ class MovieViewModel @Inject constructor(
                     is Resource.Error -> {
                         _movieState.update { it.copy(error = result.message, isLoading = false) }
                     }
+
                     is Resource.Loading -> {
                         _movieState.update { it.copy(isLoading = true) }
 
                     }
+
                     is Resource.Success -> {
                         result.data?.let { media ->
-                            _movieState.update { it.copy(trendingMovieList = media, isLoading = false) }
+                            _movieState.update {
+                                it.copy(
+                                    trendingMovieList = media.shuffled(),
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun getTopRatedSeries() {
+        viewModelScope.launch {
+            repository.getTopRatedSeries(
+                type = Constant.SERIES_TYPE,
+                category = Constant.TOP_RATED,
+                page = 1
+            ).collectLatest { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
+                    }
+
+                    is Resource.Loading -> {
+                        _movieState.update { it.copy(isLoading = true) }
+                    }
+
+                    is Resource.Success -> {
+                        result.data?.let { media ->
+                            _movieState.update { it.copy(topRatedSeriesList = media.shuffled()) }
                         }
                     }
                 }

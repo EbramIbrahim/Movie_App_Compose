@@ -7,8 +7,6 @@ import retrofit2.http.Query
 
 interface MovieApi {
 
-
-
     @GET("movie/{category}")
     suspend fun getMovieList(
         @Path("category") category: String,
@@ -21,6 +19,15 @@ interface MovieApi {
     suspend fun getTrendingMovie(
         @Path("type") type: String,
         @Path("time") time: String,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): MediaListDto
+
+
+    @GET("{type}/{category}")
+    suspend fun getTopRatedSeries(
+        @Path("type") type: String,
+        @Path("category") category: String,
         @Query("page") page: Int,
         @Query("api_key") apiKey: String = API_KEY
     ): MediaListDto
