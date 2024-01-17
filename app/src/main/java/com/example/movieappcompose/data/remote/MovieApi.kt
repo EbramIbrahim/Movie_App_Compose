@@ -32,6 +32,13 @@ interface MovieApi {
         @Query("api_key") apiKey: String = API_KEY
     ): MediaListDto
 
+    @GET("search/multi")
+    suspend fun getSearchList(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): MediaListDto
+
 }
 
 

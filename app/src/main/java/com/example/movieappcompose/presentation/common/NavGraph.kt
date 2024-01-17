@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.movieappcompose.presentation.details_screen.DetailsScreen
 import com.example.movieappcompose.presentation.home_screen.HomeScreen
+import com.example.movieappcompose.presentation.search_screen.SearchScreen
 import com.example.movieappcompose.utils.Screens
 
 
@@ -33,6 +34,10 @@ fun NavGraph(
             )
         ) {
             DetailsScreen()
+        }
+
+        composable(route = Screens.SearchScreen.rout) {
+            SearchScreen()
         }
 
 

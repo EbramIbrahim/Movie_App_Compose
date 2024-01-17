@@ -35,27 +35,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import com.example.movieappcompose.domain.model.Movie
+import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.RatingBar
-import com.example.movieappcompose.utils.Screens
 import com.example.movieappcompose.utils.getAverageColor
 
 @Composable
 fun MovieItem(
-    navController: NavController,
-    movie: Movie,
+    media: Media,
 ) {
 
 
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(Constant.IMAGE_BASE_URL + movie.backdrop_path)
+            .data(Constant.IMAGE_BASE_URL + media.backdropPath)
             .size(Size.ORIGINAL)
             .build()
     ).state
@@ -82,7 +79,7 @@ fun MovieItem(
                 )
             )
             .clickable {
-                navController.navigate(Screens.Details.rout + "/${movie.id}")
+               // navController.navigate(Screens.Details.rout + "/${media.id}")
             }
     ) {
 
@@ -99,7 +96,7 @@ fun MovieItem(
                 Icon(
                     modifier = Modifier.size(70.dp),
                     imageVector = Icons.Rounded.ImageNotSupported,
-                    contentDescription = movie.title
+                    contentDescription = media.title
                 )
             }
         }
@@ -116,7 +113,7 @@ fun MovieItem(
                     .height(250.dp)
                     .clip(RoundedCornerShape(22.dp)),
                 painter = imageState.painter,
-                contentDescription = movie.title,
+                contentDescription = media.title,
                 contentScale = ContentScale.Crop
             )
 
@@ -124,7 +121,7 @@ fun MovieItem(
 
             Text(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                text = movie.title,
+                text = media.title,
                 color = Color.White,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -137,12 +134,12 @@ fun MovieItem(
             ) {
                 RatingBar(
                     starsModifier = Modifier.size(18.dp),
-                    rating = movie.vote_average / 2
+                    rating = media.voteAverage / 2
                 )
 
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = movie.vote_average.toString().take(3),
+                    text = media.voteAverage.toString().take(3),
                     color = Color.LightGray,
                     fontSize = 14.sp,
                     maxLines = 1,

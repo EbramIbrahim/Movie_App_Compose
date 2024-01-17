@@ -4,17 +4,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.movieappcompose.presentation.common.SearchBarField
 import com.example.movieappcompose.presentation.state_event.MovieState
 import com.example.movieappcompose.utils.Constant
 
 @Composable
 fun MainScreenSection(
     movieState: MovieState,
+    navController: NavController
 ) {
 
 
@@ -22,7 +26,19 @@ fun MainScreenSection(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .statusBarsPadding()
     ) {
+
+        SearchBarField(
+            isEnabled = false,
+            searchState = null,
+            onEvent = {null},
+            navigate = {
+                navController.navigate(it)
+            }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         MovieScreenSection(
             type = Constant.trendingAllListScreen,

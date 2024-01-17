@@ -4,20 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Upcoming
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -30,7 +22,6 @@ import com.example.movieappcompose.presentation.common.BottomNavBar
 import com.example.movieappcompose.utils.Screens
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
 
@@ -45,7 +36,7 @@ fun HomeScreen(navHostController: NavHostController) {
                 bottomItems = listOf(
                     BottomNavItems(
                         title = "Popular",
-                        icon = Icons.Rounded.Movie,
+                        icon = Icons.Rounded.Home,
                         route = Screens.PopularMovieList.rout
                     ),
                     BottomNavItems(
@@ -60,26 +51,8 @@ fun HomeScreen(navHostController: NavHostController) {
                 },
                 navController = bottomNavController
             )
-        },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = if (
-                            bottomNavController.currentBackStackEntry?.destination?.route ==
-                            Screens.PopularMovieList.rout
-                        ) "Popular Movie"
-                        else "Upcoming Movie",
-                        fontSize = 20.sp
-                    )
-                },
-                modifier = Modifier.shadow(2.dp),
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    MaterialTheme.colorScheme.inverseOnSurface
-                )
-            )
-
         }
+
     ) {
 
         Box(
@@ -92,12 +65,11 @@ fun HomeScreen(navHostController: NavHostController) {
                 startDestination = Screens.PopularMovieList.rout
             ) {
                 composable(route = Screens.PopularMovieList.rout) {
-                    MainScreenSection(movieState = movieState)
+                    MainScreenSection(movieState = movieState, navController = navHostController)
                 }
 
                 composable(route = Screens.UpcomingMovieList.rout) {
                     UpcomingScreen(
-                        navController = navHostController,
                         movieState = movieState,
                         onEvent = viewModel::onEvent
                     )

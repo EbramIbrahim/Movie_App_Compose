@@ -15,12 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.state_event.MovieEvent
 import com.example.movieappcompose.presentation.state_event.MovieState
-import com.example.movieappcompose.presentation.common.MovieItem
 import com.example.movieappcompose.utils.Constant
 
 @Composable
 fun PopularScreen(
-    navController: NavController,
     movieState: MovieState,
     onEvent: (MovieEvent) -> Unit
 ) {
@@ -39,10 +37,10 @@ fun PopularScreen(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp)
         ) {
             items(movieState.popularMovieList.size) {index ->
-                MovieItem(
-                    navController = navController,
-                    movie = movieState.popularMovieList[index]
-                )
+//                MovieItem(
+//                    navController = navController,
+//                    media = movieState.popularMovieList[index]
+//                )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 val shouldPaginate = index >= movieState.popularMovieList.size -1 && !movieState.isLoading
