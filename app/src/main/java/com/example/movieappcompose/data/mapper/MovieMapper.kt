@@ -6,61 +6,102 @@ import com.example.movieappcompose.data.remote.MovieDto
 import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.model.Movie
 
-
-fun MovieDto.toMovieEntity(
+// from remote to local
+fun MediaDto.toMovieEntity(
     category: String
 ): MovieEntity {
     return MovieEntity(
-        adult = adult ?: false,
-        backdrop_path = backdrop_path ?: "",
-        genre_ids = try {
-            genre_ids?.joinToString(",") ?: "-1, -2"
+        backdropPath = backdrop_path ?: "",
+        originalLanguage = original_language ?: "",
+        overview = overview ?: "",
+        posterPath = poster_path ?: "",
+        releaseDate = release_date ?: "-1,-2",
+        title = title ?: name ?: "",
+        originalName = original_name ?: "",
+        voteAverage = vote_average ?: 0.0,
+        popularity = popularity ?: 0.0,
+        voteCount = vote_count ?: 0,
+        genreIds = try {
+            genre_ids?.joinToString(",") ?: "-1,-2"
         } catch (e: Exception) {
             "-1,-2"
         },
-        id = id ?: -1,
-        original_language = original_language ?: "",
-        original_title = original_title ?: "",
-        overview = overview ?: "",
-        popularity = popularity ?: 0.0,
-        poster_path = poster_path ?: "",
-        release_date = release_date ?: "",
-        title = title ?: "",
+        id = id ?: 1,
+        adult = adult ?: false,
+        mediaType = media_type ?: "",
+        category = category,
+        originCountry = try {
+            origin_country?.joinToString(",") ?: "-1,-2"
+        } catch (e: Exception) {
+            "-1,-2"
+        },
+        originalTitle = original_title ?: original_name ?: "",
+        videos = try {
+            videos?.joinToString(",") ?: "-1,-2"
+        } catch (e: Exception) {
+            "-1,-2"
+        },
+        similarMediaList = try {
+            similarMediaList?.joinToString(",") ?: "-1,-2"
+        } catch (e: Exception) {
+            "-1,-2"
+        },
+        firstAirDate = first_air_date ?: "",
         video = video ?: false,
-        vote_average = vote_average ?: 0.0,
-        vote_count = vote_count ?: 0,
-        category = category
-    )
 
+        status = "",
+        runtime = 0,
+        tagline = "",
+    )
 }
 
-fun MovieEntity.toMovie(
+// from local to Model
+fun MovieEntity.toMedia(
     category: String
-): Movie {
-    return Movie(
+): Media {
+    return Media(
         adult = adult,
-        backdrop_path = backdrop_path,
-        genre_ids = try {
-            genre_ids.split(",").map { it.toInt() }
+        backdropPath = backdropPath,
+        genreIds = try {
+            genreIds.split(",").map { it.toInt() }
         } catch (e: Exception) {
             listOf(-1, -2)
         },
         id = id,
-        original_language = original_language,
-        original_title = original_title,
+        originalLanguage = originalLanguage,
+        originalTitle = originalTitle,
         overview = overview,
         popularity = popularity,
-        poster_path = poster_path,
-        release_date = release_date,
+        posterPath = posterPath,
+        releaseDate = releaseDate,
         title = title,
-        video = video,
-        vote_average = vote_average,
-        vote_count = vote_count,
-        category = category
+        videos = try {
+            videos.split(",")
+        } catch (e: Exception) {
+            listOf("")
+        },
+        voteAverage = voteAverage,
+        voteCount = voteCount,
+        category = category,
+        similarMediaList = try {
+            similarMediaList.split(",").map { it.toInt() }
+        } catch (e: Exception) {
+            listOf(-1, -2)
+        },
+        runtime = runtime ,
+        status = status,
+        mediaType = mediaType,
+        originCountry = try {
+            originCountry.split(",")
+        } catch (e: Exception) {
+            listOf("-1", "-2")
+        },
+        tagline = tagline
     )
 
 }
 
+//from remote to Model
 fun MediaDto.toMedia(
     type: String,
     category: String,

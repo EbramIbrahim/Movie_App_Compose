@@ -1,5 +1,9 @@
 package com.example.movieappcompose.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize()
 data class Media(
     val adult: Boolean,
     val backdropPath: String,
@@ -22,4 +26,4 @@ data class Media(
     var tagline: String?,
     val videos: List<String>?,
     var similarMediaList: List<Int>,
-)
+):Parcelable

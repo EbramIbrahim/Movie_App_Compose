@@ -45,7 +45,7 @@ class DetailsViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         result.data?.let { movie ->
-                            _movieDetails.update { it.copy(movie = movie) }
+//                            _movieDetails.update { it.copy(movie = movie) }
                         }
                     }
                 }

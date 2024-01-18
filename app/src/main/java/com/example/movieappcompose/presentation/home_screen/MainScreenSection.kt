@@ -35,7 +35,8 @@ fun MainScreenSection(
             onEvent = {null},
             navigate = {
                 navController.navigate(it)
-            }
+            },
+            navController
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -43,17 +44,19 @@ fun MainScreenSection(
         MovieScreenSection(
             type = Constant.trendingAllListScreen,
             movieState = movieState,
+            navController = navController
             )
 
         Spacer(modifier = Modifier.height(16.dp))
         
-        AutoSwipeSection(movieState = movieState)
+        AutoSwipeSection(movieState = movieState, navController = navController)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MovieScreenSection(
             type = Constant.tvSeriesScreen,
-            movieState = movieState
+            movieState = movieState,
+            navController = navController
         )
 
         Spacer(modifier = Modifier.height(16.dp))

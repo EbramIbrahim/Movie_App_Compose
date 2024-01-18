@@ -60,11 +60,11 @@ class SearchViewModel @Inject constructor(
                         _searchState.update { it.copy(error = result.message, isLoading = false) }
                     }
                     is Resource.Loading -> {
-                        _searchState.update { it.copy(isLoading = false) }
+                        _searchState.update { it.copy(isLoading = true) }
                     }
                     is Resource.Success -> {
                         result.data?.let { media ->
-                            _searchState.update { it.copy(searchList = media) }
+                            _searchState.update { it.copy(searchList = media, isLoading = false) }
                         }
                     }
                 }

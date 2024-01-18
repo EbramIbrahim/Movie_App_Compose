@@ -5,8 +5,8 @@ import com.example.movieappcompose.domain.model.Movie
 
 data class MovieState(
 
-    val popularMovieList: List<Movie> = emptyList(),
-    val upcomingMovieList: List<Movie> = emptyList(),
+    val popularMovieList: List<Media> = emptyList(),
+    val upcomingMovieList: List<Media> = emptyList(),
     val trendingMovieList: List<Media> = emptyList(),
     val specialMovieList: List<Media> = emptyList(),
     val topRatedSeriesList: List<Media> = emptyList(),

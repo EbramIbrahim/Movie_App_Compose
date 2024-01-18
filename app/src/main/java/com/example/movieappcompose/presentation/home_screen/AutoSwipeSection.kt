@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.common.AutoSwipeImagePager
 import com.example.movieappcompose.presentation.state_event.MovieState
 
 @Composable
 fun AutoSwipeSection(
-    movieState: MovieState
+    movieState: MovieState,
+    navController: NavController
 ) {
 
     Column {
@@ -46,7 +48,8 @@ fun AutoSwipeSection(
             mediaList = movieState.trendingMovieList.shuffled().take(7),
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .height(200.dp)
+                .height(200.dp),
+            navController = navController
         )
 
     }

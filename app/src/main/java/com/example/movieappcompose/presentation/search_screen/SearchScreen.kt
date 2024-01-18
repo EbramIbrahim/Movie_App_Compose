@@ -7,10 +7,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.common.SearchBarField
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavController) {
     
     val viewModel = hiltViewModel<SearchViewModel>()
     val searchState by viewModel.searchState.collectAsState()
@@ -20,7 +21,8 @@ fun SearchScreen() {
             isEnabled = true,
             searchState = searchState,
             onEvent = viewModel::onEvent,
-            navigate = { null }
+            navigate = { null },
+            navController = navController
         )
     }
     

@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -40,6 +41,7 @@ import com.example.movieappcompose.utils.getAverageColor
 fun Item(
     media: Media,
     modifier: Modifier = Modifier,
+    navController: NavController,
 ) {
 
     val imageUrl = "${Constant.IMAGE_BASE_URL}${media.posterPath}"
@@ -61,7 +63,7 @@ fun Item(
         modifier = modifier
             .clip(RoundedCornerShape(22.dp))
             .clickable {
-               // TODO()
+                navigateWithMedia(navController, media)
             }
             .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {

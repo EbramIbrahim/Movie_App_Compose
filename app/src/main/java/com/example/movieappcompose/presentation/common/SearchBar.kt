@@ -1,5 +1,6 @@
 package com.example.movieappcompose.presentation.common
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.search_screen.SearchEvent
 import com.example.movieappcompose.presentation.search_screen.SearchState
 import com.example.movieappcompose.utils.Screens
@@ -29,7 +31,8 @@ fun SearchBarField(
     isEnabled: Boolean,
     searchState: SearchState?,
     onEvent: (SearchEvent) -> Unit?,
-    navigate:(String) -> Unit?
+    navigate:(String) -> Unit?,
+    navController: NavController
 ) {
 
     SearchBar(
@@ -75,18 +78,23 @@ fun SearchBarField(
     ) {
         if (searchState?.isLoading == true) {
             Box(modifier = Modifier.fillMaxSize()) {
-                LinearProgressIndicator()
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
+            AnimatedVisibility(visible = !searchState?.isLoading!!) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2)
+                ) {
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2)
-        ) {
-
-            items(searchState?.searchList?.size ?: 0) { index ->
-                MovieItem(media = searchState?.searchList!![index])
+                    items(searchState.searchList.size) { index ->
+                        MovieItem(media = searchState.searchList[index], navController = navController)
+                    }
+                }
             }
-        }
+
+
 
     }
 

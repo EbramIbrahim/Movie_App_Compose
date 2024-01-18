@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.common.Item
+import com.example.movieappcompose.presentation.common.navigateWithMedia
 import com.example.movieappcompose.presentation.state_event.MovieState
 import com.example.movieappcompose.utils.Constant
 
@@ -25,6 +27,7 @@ import com.example.movieappcompose.utils.Constant
 fun MovieScreenSection(
     type: String,
     movieState: MovieState,
+    navController: NavController
 ) {
 
 
@@ -91,7 +94,8 @@ fun MovieScreenSection(
                     modifier = Modifier
                         .width(150.dp)
                         .height(200.dp)
-                        .padding(start = 16.dp, end = endPadding)
+                        .padding(start = 16.dp, end = endPadding),
+                    navController = navController
                 )
             }
 

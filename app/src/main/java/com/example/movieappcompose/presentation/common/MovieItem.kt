@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -47,6 +48,7 @@ import com.example.movieappcompose.utils.getAverageColor
 @Composable
 fun MovieItem(
     media: Media,
+    navController: NavController
 ) {
 
 
@@ -79,7 +81,7 @@ fun MovieItem(
                 )
             )
             .clickable {
-               // navController.navigate(Screens.Details.rout + "/${media.id}")
+               navigateWithMedia(navController, media)
             }
     ) {
 

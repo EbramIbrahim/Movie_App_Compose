@@ -12,7 +12,7 @@ interface MovieApi {
         @Path("category") category: String,
         @Query("page") page: Int,
         @Query("api_key") apiKey: String = API_KEY
-    ): MovieDtoResponse
+    ): MediaListDto
 
 
     @GET("trending/{type}/{time}")
