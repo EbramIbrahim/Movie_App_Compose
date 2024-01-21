@@ -7,7 +7,7 @@ import com.example.movieappcompose.utils.Screens
 
 val navigateWithMedia: (
     navController: NavController,
-    media: Media
+    media: Media?
 ) -> Unit = { navController, media ->
 
     navController.currentBackStackEntry?.savedStateHandle?.set(

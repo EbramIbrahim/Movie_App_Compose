@@ -39,6 +39,14 @@ interface MovieApi {
         @Query("api_key") apiKey: String = API_KEY
     ): MediaListDto
 
+    @GET("{type}/{id}/similar")
+    suspend fun getSimilarList(
+        @Path("type") type: String,
+        @Path("id") id: Int,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): MediaListDto
+
 }
 
 

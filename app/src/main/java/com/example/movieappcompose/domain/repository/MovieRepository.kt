@@ -30,6 +30,11 @@ interface MovieRepository {
     ): Flow<Resource<List<Media>>>
 
 
+    suspend fun getSimilarList(
+        type: String,
+        id: Int,
+        page: Int
+    ): Flow<Resource<List<Media>>>
 
 
 }

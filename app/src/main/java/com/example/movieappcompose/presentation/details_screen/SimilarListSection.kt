@@ -1,4 +1,4 @@
-package com.example.movieappcompose.presentation.home_screen
+package com.example.movieappcompose.presentation.details_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,55 +18,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.common.Item
-import com.example.movieappcompose.presentation.state_event.MovieState
-import com.example.movieappcompose.utils.Constant
 
 
 @Composable
-fun MovieScreenSection(
-    type: String,
-    movieState: MovieState,
+fun SimilarListSection(
+    detailsState: MovieDetailsState,
     navController: NavController
 ) {
 
 
-    val title = when (type) {
-        Constant.trendingAllListScreen -> {
-            "Trending Now"
-        }
-
-        Constant.tvSeriesScreen -> {
-            "Tv Series"
-        }
-
-        else -> ""
-    }
-
-    val mediaList = when(type) {
-        Constant.trendingAllListScreen -> {
-            movieState.trendingMovieList.take(10)
-        }
-        Constant.tvSeriesScreen -> {
-            movieState.topRatedSeriesList.take(10)
-        }
-
-        else -> emptyList()
-    }
-
-
+    val similarList = detailsState.similarMovie.take(10)
 
     Column {
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 32.dp),
+                .padding(horizontal = 16.dp, vertical = 32.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = title,
+                text = "Similar",
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 20.sp,
             )
@@ -81,25 +55,29 @@ fun MovieScreenSection(
         }
 
         LazyRow {
-            items(mediaList.size) {
+
+            items(similarList.size) { index ->
+
                 var endPadding = 0.dp
 
-                if (it == mediaList.size - 1) {
+                if (index == similarList.size - 1){
                     endPadding = 16.dp
                 }
 
                 Item(
-                    media = mediaList[it],
+                    media = detailsState.similarMovie[index],
                     modifier = Modifier
-                        .width(150.dp)
                         .height(200.dp)
+                        .width(150.dp)
                         .padding(start = 16.dp, end = endPadding),
                     navController = navController
                 )
             }
-
         }
+
     }
+
+
 }
 
 

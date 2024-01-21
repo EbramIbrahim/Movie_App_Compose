@@ -125,6 +125,7 @@ class MovieRepositoryImpl @Inject constructor(
                 return@flow
             }
 
+
             trendingMovieList.let {
                 val media = it.results.map { media ->
                     media.toMedia(media.media_type ?: "", Constant.TRENDING)
@@ -203,6 +204,36 @@ class MovieRepositoryImpl @Inject constructor(
                 )
             )
 
+        }
+    }
+
+    override suspend fun getSimilarList(
+        type: String,
+        id: Int,
+        page: Int
+    ): Flow<Resource<List<Media>>> {
+        return flow {
+
+            emit(Resource.Loading(true))
+
+
+            val fetchSimilarList = try {
+                movieApi.getSimilarList(
+                    type, id, page
+                )
+            } catch (e: IOException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            } catch (e: HttpException) {
+                emit((Resource.Error(e.localizedMessage!!)))
+                return@flow
+            }
+
+            val media = fetchSimilarList.results.map {
+                it.toMedia(it.media_type ?: "", category = it.category ?: "")
+            }
+
+            emit(Resource.Success(media))
         }
     }
 }

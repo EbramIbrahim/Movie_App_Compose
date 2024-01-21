@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
@@ -128,6 +129,18 @@ fun MovieItem(
                 fontSize = 16.sp,
                 maxLines = 1,
             )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+                text = media.overview,
+                color = Color.White,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
 
             Row (
                 modifier = Modifier

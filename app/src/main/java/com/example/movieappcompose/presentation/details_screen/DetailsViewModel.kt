@@ -18,34 +18,31 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
-    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val _movieDetails: MutableStateFlow<MovieDetailsState> =
         MutableStateFlow(MovieDetailsState())
     val movieDetails = _movieDetails.asStateFlow()
 
-    private val movieId = savedStateHandle.get<Int>("movieId")
-
-    init {
-        getMovieDetails(movieId ?: -1)
-    }
 
 
-
-    private fun getMovieDetails(movieId: Int) {
+     fun getMovieDetails(
+        type: String,
+        id: Int,
+        page: Int
+    ) {
         viewModelScope.launch {
-            movieRepository.getMovieListById(movieId).collectLatest { result ->
+            movieRepository.getSimilarList(type, id, page).collectLatest { result ->
                 when(result) {
                     is Resource.Error -> {
-                        _movieDetails.update { it.copy(isLoading = false) }
+                        _movieDetails.update { it.copy(isLoading = false, error = result.message) }
                     }
                     is Resource.Loading -> {
                         _movieDetails.update { it.copy(isLoading = true) }
                     }
                     is Resource.Success -> {
                         result.data?.let { movie ->
-//                            _movieDetails.update { it.copy(movie = movie) }
+                            _movieDetails.update { it.copy(similarMovie = movie) }
                         }
                     }
                 }

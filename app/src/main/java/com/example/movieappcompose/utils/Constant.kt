@@ -15,6 +15,7 @@ object Constant {
     const val tvSeriesScreen = "tvSeriesScreen"
     const val TOP_RATED = "top_rated"
     const val SERIES_TYPE = "tv"
+    const val similarList = "similarList"
 
 
 }

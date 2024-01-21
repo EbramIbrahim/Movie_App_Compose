@@ -31,7 +31,7 @@ fun NavGraph(
                 navController.previousBackStackEntry?.savedStateHandle?.get<Media>(
                     "media"
                 )
-            DetailsScreen(mediaDetails)
+            DetailsScreen(mediaDetails, navController)
         }
 
         composable(route = Screens.SearchScreen.rout) {
