@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.movieappcompose.presentation.common.SearchBarField
 import com.example.movieappcompose.presentation.state_event.MovieState
 import com.example.movieappcompose.utils.Constant
+import com.example.movieappcompose.utils.Screens
 
 @Composable
 fun MainScreenSection(
@@ -32,7 +33,7 @@ fun MainScreenSection(
         SearchBarField(
             isEnabled = false,
             searchState = null,
-            onEvent = {null},
+            onEvent = { null },
             navigate = {
                 navController.navigate(it)
             },
@@ -44,11 +45,14 @@ fun MainScreenSection(
         MovieScreenSection(
             type = Constant.trendingAllListScreen,
             movieState = movieState,
-            navController = navController
-            )
+            navController = navController,
+            seeAll = {
+                navController.navigate(Screens.AllMovieAndSeriesScreen.rout + "/{$it}")
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         AutoSwipeSection(movieState = movieState, navController = navController)
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -56,13 +60,15 @@ fun MainScreenSection(
         MovieScreenSection(
             type = Constant.tvSeriesScreen,
             movieState = movieState,
-            navController = navController
+            navController = navController,
+            seeAll = {
+                navController.navigate(Screens.AllMovieAndSeriesScreen.rout + "/{$it}")
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
     }
-
 
 
 }

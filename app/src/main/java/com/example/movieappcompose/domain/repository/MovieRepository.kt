@@ -7,6 +7,11 @@ import kotlinx.coroutines.flow.Flow
 interface MovieRepository {
 
 
+    suspend fun getMovieList(
+        category: String,
+        page: Int
+    ): Flow<Resource<List<Media>>>
+
 
     suspend fun getMovieListById(
         id: Int

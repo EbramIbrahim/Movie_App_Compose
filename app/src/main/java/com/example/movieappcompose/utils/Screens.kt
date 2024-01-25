@@ -1,9 +1,12 @@
 package com.example.movieappcompose.utils
 
 sealed class Screens(val rout: String) {
-    object Home : Screens("main")
-    object PopularMovieList : Screens("popularMovie")
-    object UpcomingMovieList : Screens("upcomingMovie")
+
+    object SplashScreen: Screens("splash")
+    object Home : Screens("home")
+    object MainScreen: Screens("main_screen")
+    object AllMovieAndSeriesScreen : Screens("see_all")
+    object PopularScreen : Screens("PopularScreen")
     object Details : Screens("details")
     object SearchScreen: Screens("search_screen")
 

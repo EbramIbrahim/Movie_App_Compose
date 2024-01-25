@@ -34,7 +34,6 @@ fun BottomNavBar(
                     selected = selected,
                     onClick = {
                         onItemClick(bottomNavItems.route)
-                        navController.popBackStack()
                     },
                     icon = {
                         Icon(

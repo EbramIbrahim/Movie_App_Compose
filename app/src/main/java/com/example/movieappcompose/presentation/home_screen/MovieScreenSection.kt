@@ -1,5 +1,6 @@
 package com.example.movieappcompose.presentation.home_screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,8 @@ import com.example.movieappcompose.utils.Constant
 fun MovieScreenSection(
     type: String,
     movieState: MovieState,
-    navController: NavController
+    navController: NavController,
+    seeAll: (String) -> Unit
 ) {
 
 
@@ -42,10 +44,11 @@ fun MovieScreenSection(
         else -> ""
     }
 
-    val mediaList = when(type) {
+    val mediaList = when (type) {
         Constant.trendingAllListScreen -> {
             movieState.trendingMovieList.take(10)
         }
+
         Constant.tvSeriesScreen -> {
             movieState.topRatedSeriesList.take(10)
         }
@@ -72,7 +75,9 @@ fun MovieScreenSection(
             )
 
             Text(
-                modifier = Modifier.alpha(0.7f),
+                modifier = Modifier
+                    .alpha(0.7f)
+                    .clickable { seeAll(type) },
                 text = "See All",
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 14.sp,

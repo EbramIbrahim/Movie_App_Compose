@@ -23,67 +23,34 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
 
 
-//    override suspend fun getMovieListByCategory(
-//        category: String,
-//        page: Int,
-//        shouldFetchFromRemote: Boolean
-//    ): Flow<Resource<List<Media>>> {
-//
-//        return channelFlow {
-//
-//            // 1- Loading State
-//            send(Resource.Loading(true))
-//
-//            delay(2000L)
-//
-//            // 2- check if there is data in offline database
-//            withContext(Dispatchers.IO) {
-//                val movieFromLocal = movieDatabase.movieDao.getMoviesByCategory(category)
-//                val shouldFetchFromLocal = movieFromLocal.isNotEmpty() && !shouldFetchFromRemote
-//
-//                // 3- if true show data from local database
-//                if (shouldFetchFromLocal) {
-//                    val movie = movieFromLocal.map { movieEntity ->
-//                        movieEntity.toMedia(category)
-//                    }
-//                    send(Resource.Success(movie))
-//
-//                    send(Resource.Loading(false))
-//                    return@withContext
-//                }
-//            }
-//
-//
-//            // 4- if false fetch data from remote database
-//            val movieFromRemote = try {
-//                movieApi.getMovieList(category, page)
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//                send(Resource.Error(message = e.localizedMessage!!))
-//                return@channelFlow
-//            } catch (e: HttpException) {
-//                e.printStackTrace()
-//                send(Resource.Error(message = e.localizedMessage!!))
-//                return@channelFlow
-//            }
-//
-//            // 5- save data that been fetched from remote to local
-//            val movieEntity = movieFromRemote.results.map {
-//                it.to(category)
-//            }
-//            movieDatabase.movieDao.insertMovie(movieEntity)
-//
-//            // 6- show data to user
-//            send(Resource.Success(movieEntity.map { it.(category) }))
-//
-//            send(Resource.Loading(false))
-//
-//            awaitClose()
-//
-//        }
-//
-//
-//    }
+    override suspend fun getMovieList(
+        category: String,
+        page: Int
+    ): Flow<Resource<List<Media>>> {
+        return flow {
+
+            emit(Resource.Loading(true))
+            delay(2000L)
+
+            val fetchPopularList = try {
+                movieApi.getMovieList(category, page)
+            } catch (e: IOException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            } catch (e: HttpException) {
+                emit(Resource.Error(e.localizedMessage!!))
+                return@flow
+            }
+
+            val media = fetchPopularList.results.map {
+                it.toMedia(type = it.media_type ?: "", category = category)
+            }
+
+            emit(Resource.Success(media))
+
+        }
+    }
+
 
     override suspend fun getMovieListById(id: Int): Flow<Resource<Media>> {
         return channelFlow {
@@ -229,7 +196,9 @@ class MovieRepositoryImpl @Inject constructor(
                 return@flow
             }
 
-            val media = fetchSimilarList.results.map {
+
+
+            val media = fetchSimilarList.body()?.results?.map {
                 it.toMedia(it.media_type ?: "", category = it.category ?: "")
             }
 

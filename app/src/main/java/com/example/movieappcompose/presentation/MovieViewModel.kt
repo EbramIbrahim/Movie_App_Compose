@@ -34,15 +34,11 @@ class MovieViewModel @Inject constructor(
     fun onEvent(event: MovieEvent) {
         when (event) {
             is MovieEvent.GetMovieListFromRemote -> {
-//                if (event.category == Constant.POPULAR) {
-//                    getPopularMovieList(true)
-//                } else if (event.category == Constant.UPCOMING) {
-//                    getUpcomingMovieList(true)
-//                }
+                getPopularMovieList()
             }
 
             MovieEvent.InitialProcesses -> {
-//              getPopularMovieList(false)
+                getPopularMovieList()
 //              getUpcomingMovieList(false)
                 getTrendingMovieList()
                 getTopRatedSeries()
@@ -51,38 +47,37 @@ class MovieViewModel @Inject constructor(
     }
 
 
-//    private fun getPopularMovieList(shouldFetchFromRemote: Boolean) {
-//        viewModelScope.launch {
-//            repository.getMovieListByCategory(
-//                category = Constant.POPULAR,
-//                page = _movieState.value.popularMoviePage,
-//                shouldFetchFromRemote = shouldFetchFromRemote
-//            ).collectLatest { result ->
-//                when (result) {
-//                    is Resource.Error -> {
-//                        _movieState.update { it.copy(error = result.message, isLoading = false) }
-//                    }
-//
-//                    is Resource.Loading -> {
-//                        _movieState.update { it.copy(isLoading = result.isLoading) }
-//                    }
-//
-//                    is Resource.Success -> {
-//                        result.data?.let { popularMovie ->
-//                            _movieState.update {
-//                                it.copy(
-//                                    popularMovieList = _movieState.value.popularMovieList +
-//                                            popularMovie.shuffled(),
-//                                    popularMoviePage = _movieState.value.popularMoviePage + 1,
-//                                    isLoading = false
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private fun getPopularMovieList() {
+        viewModelScope.launch {
+            repository.getMovieList(
+                category = Constant.POPULAR,
+                page = _movieState.value.popularMoviePage,
+            ).collectLatest { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
+                    }
+
+                    is Resource.Loading -> {
+                        _movieState.update { it.copy(isLoading = result.isLoading) }
+                    }
+
+                    is Resource.Success -> {
+                        result.data?.let { popularMovie ->
+                            _movieState.update {
+                                it.copy(
+                                    popularMovieList = _movieState.value.popularMovieList +
+                                            popularMovie.shuffled(),
+                                    popularMoviePage = _movieState.value.popularMoviePage + 1,
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 //    private fun getUpcomingMovieList(shouldFetchFromRemote: Boolean) {
 //        viewModelScope.launch {

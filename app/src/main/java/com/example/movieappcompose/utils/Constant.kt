@@ -13,6 +13,7 @@ object Constant {
     const val ALL = "all"
     const val trendingAllListScreen = "trendingAllListScreen"
     const val tvSeriesScreen = "tvSeriesScreen"
+    const val popularMovieScreen = "popularMovieScreen"
     const val TOP_RATED = "top_rated"
     const val SERIES_TYPE = "tv"
     const val similarList = "similarList"

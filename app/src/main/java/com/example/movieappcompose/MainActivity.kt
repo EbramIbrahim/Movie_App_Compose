@@ -28,7 +28,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavGraph(navController = navController)
+                    NavGraph(
+                        navController = navController
+                    )
 
                 }
             }
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
         val systemUiController = rememberSystemUiController()
         LaunchedEffect(key1 = color) {
             systemUiController.setSystemBarsColor(color)
+            systemUiController.setNavigationBarColor(color)
         }
     }
 }
