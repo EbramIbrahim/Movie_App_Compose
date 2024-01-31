@@ -1,5 +1,6 @@
 package com.example.movieappcompose.domain.repository
 
+import com.example.movieappcompose.data.local.MovieEntity
 import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -13,9 +14,13 @@ interface MovieRepository {
     ): Flow<Resource<List<Media>>>
 
 
-    suspend fun getMovieListById(
-        id: Int
-    ): Flow<Resource<Media>>
+
+    suspend fun upsertMovie(movieEntity: MovieEntity)
+
+     fun getFavoriteMovie(): Flow<Resource<List<Media>>>
+
+     fun getWatchedMovie(): Flow<Resource<List<Media>>>
+
 
     suspend fun getTrendingMovieList(
         type: String,

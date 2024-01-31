@@ -52,13 +52,13 @@ fun MediaDto.toMovieEntity(
         status = "",
         runtime = 0,
         tagline = "",
+        isWatched = false,
+        isFavorite = false
     )
 }
 
 // from local to Model
-fun MovieEntity.toMedia(
-    category: String
-): Media {
+fun MovieEntity.toMedia(): Media {
     return Media(
         adult = adult,
         backdropPath = backdropPath,
@@ -96,7 +96,9 @@ fun MovieEntity.toMedia(
         } catch (e: Exception) {
             listOf("-1", "-2")
         },
-        tagline = tagline
+        tagline = tagline,
+        isWatched = false,
+        isFavorite = false
     )
 
 }
@@ -127,10 +129,62 @@ fun MediaDto.toMedia(
         status = null,
         tagline = null,
         videos = videos,
-        similarMediaList = similarMediaList ?: emptyList()
+        similarMediaList = similarMediaList ?: emptyList(),
+        isFavorite = false,
+        isWatched = false,
     )
 }
 
+fun Media.toMovieEntity(
+    isFavorite: Boolean,
+    isWatched: Boolean,
+): MovieEntity {
+    return MovieEntity(
+        adult = adult,
+        backdropPath = backdropPath,
+        genreIds = try {
+            genreIds.joinToString(",")
+        } catch (e: Exception) {
+            "-1, -2"
+        },
+        id = id,
+        originalLanguage = originalLanguage,
+        originalTitle = originalTitle,
+        overview = overview,
+        popularity = popularity,
+        posterPath = posterPath,
+        releaseDate = releaseDate,
+        title = title,
+        videos = try {
+            videos?.joinToString(",")
+        } catch (e: Exception) {
+            ""
+        }.toString(),
+        voteAverage = voteAverage,
+        voteCount = voteCount,
+        category = category,
+        similarMediaList = try {
+            similarMediaList.joinToString(",")
+        } catch (e: Exception) {
+            "-1, -2"
+        },
+        runtime = runtime ?: -1 ,
+        status = status ?: "-1",
+        mediaType = mediaType,
+        originCountry = try {
+            originCountry.joinToString(",")
+        } catch (e: Exception) {
+            "-1 -2"
+        },
+        tagline = tagline ?: "-1",
+        isWatched = isWatched,
+        isFavorite = isFavorite,
+        firstAirDate = ",",
+        originalName = "",
+        video = false
+    )
+
+}
 
 
 

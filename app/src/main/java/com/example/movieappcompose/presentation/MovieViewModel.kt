@@ -1,5 +1,6 @@
 package com.example.movieappcompose.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappcompose.domain.repository.MovieRepository
@@ -30,7 +31,6 @@ class MovieViewModel @Inject constructor(
         onEvent(MovieEvent.InitialProcesses)
     }
 
-
     fun onEvent(event: MovieEvent) {
         when (event) {
             is MovieEvent.GetMovieListFromRemote -> {
@@ -42,6 +42,15 @@ class MovieViewModel @Inject constructor(
 //              getUpcomingMovieList(false)
                 getTrendingMovieList()
                 getTopRatedSeries()
+                getWatchedMovieList()
+                getFavoriteMovieList()
+            }
+
+            MovieEvent.GetFavoriteMovieList -> {
+                getFavoriteMovieList()
+            }
+            MovieEvent.GetWatchedMovieList -> {
+                getWatchedMovieList()
             }
         }
     }
@@ -170,6 +179,63 @@ class MovieViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+
+
+    private fun getFavoriteMovieList() {
+        viewModelScope.launch {
+            repository.getFavoriteMovie().collect { result ->
+                when(result) {
+                    is Resource.Error -> {
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
+                    }
+                    is Resource.Loading -> {
+                        _movieState.update { it.copy(isLoading = true) }
+                    }
+                    is Resource.Success -> {
+                        result.data?.let { favoriteMovie ->
+                            _movieState.update {
+                                it.copy(
+                                    favoriteMovieList = favoriteMovie,
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getWatchedMovieList() {
+        viewModelScope.launch {
+            repository.getWatchedMovie().collect { result ->
+                when(result) {
+                    is Resource.Error -> {
+                        _movieState.update { it.copy(error = result.message, isLoading = false) }
+                    }
+                    is Resource.Loading -> {
+                        _movieState.update { it.copy(isLoading = true) }
+                    }
+                    is Resource.Success -> {
+                        result.data?.let { watchedMovie ->
+                            _movieState.update {
+                                it.copy(
+                                    watchedMovieList = watchedMovie,
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        Log.d("viewModel", "View Model Cleared")
+        super.onCleared()
     }
 
 

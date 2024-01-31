@@ -26,4 +26,7 @@ data class Media(
     var tagline: String?,
     val videos: List<String>?,
     var similarMediaList: List<Int>,
+    var isWatched: Boolean,
+    var isFavorite: Boolean
+
 ):Parcelable

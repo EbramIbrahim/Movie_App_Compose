@@ -3,13 +3,14 @@ package com.example.movieappcompose.presentation.home_screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,8 +18,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.movieappcompose.domain.model.BottomNavItems
 import com.example.movieappcompose.presentation.MovieViewModel
 import com.example.movieappcompose.presentation.common.BottomNavBar
-import com.example.movieappcompose.presentation.popular_screen.AllMovieAndSeriesScreen
-import com.example.movieappcompose.utils.Constant.popularMovieScreen
+import com.example.movieappcompose.presentation.favorite_screen.FavoriteScreen
+import com.example.movieappcompose.presentation.all_move_series.AllMovieAndSeriesScreen
+import com.example.movieappcompose.presentation.common.SearchBarField
 import com.example.movieappcompose.utils.Screens
 
 
@@ -28,11 +30,22 @@ fun HomeScreen(
 ) {
 
     val viewModel = hiltViewModel<MovieViewModel>()
-    val movieState = viewModel.movieState.collectAsState().value
+    val movieState = viewModel.movieState.collectAsStateWithLifecycle().value
     val bottomNavController = rememberNavController()
 
 
     Scaffold(
+        topBar =  {
+            SearchBarField(
+                isEnabled = false,
+                searchState = null,
+                onEvent = { null },
+                navigate = {
+                    navHostController.navigate(it)
+                },
+                navHostController
+            )
+        },
         bottomBar = {
             BottomNavBar(
                 bottomItems = listOf(
@@ -47,8 +60,14 @@ fun HomeScreen(
                         route = Screens.AllMovieAndSeriesScreen.rout
                     ),
 
+                    BottomNavItems(
+                        title = "Favorite",
+                        icon = Icons.Rounded.Favorite,
+                        route = Screens.Favorite.rout
+                    ),
                     ),
                 onItemClick = {
+                    bottomNavController.popBackStack()
                     bottomNavController.navigate(it)
                 },
                 navController = bottomNavController
@@ -72,9 +91,14 @@ fun HomeScreen(
 
                 composable(route = Screens.AllMovieAndSeriesScreen.rout) {
                     AllMovieAndSeriesScreen(
+                        media = movieState.popularMovieList,
+                        navController = navHostController
+                    )
+                }
+
+                composable(route = Screens.Favorite.rout) {
+                    FavoriteScreen(
                         movieState = movieState,
-                        onEvent = viewModel::onEvent,
-                        type = popularMovieScreen,
                         navController = navHostController
                     )
                 }

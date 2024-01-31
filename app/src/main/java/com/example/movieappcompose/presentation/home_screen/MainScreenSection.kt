@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.movieappcompose.presentation.common.SearchBarField
 import com.example.movieappcompose.presentation.state_event.MovieState
 import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.Screens
@@ -22,23 +21,12 @@ fun MainScreenSection(
     navController: NavController
 ) {
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .statusBarsPadding()
     ) {
-
-        SearchBarField(
-            isEnabled = false,
-            searchState = null,
-            onEvent = { null },
-            navigate = {
-                navController.navigate(it)
-            },
-            navController
-        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -47,7 +35,10 @@ fun MainScreenSection(
             movieState = movieState,
             navController = navController,
             seeAll = {
-                navController.navigate(Screens.AllMovieAndSeriesScreen.rout + "/{$it}")
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    "mediaList", movieState.trendingMovieList
+                )
+                navController.navigate(Screens.AllMovieAndSeriesScreen.rout)
             }
         )
 
@@ -62,7 +53,11 @@ fun MainScreenSection(
             movieState = movieState,
             navController = navController,
             seeAll = {
-                navController.navigate(Screens.AllMovieAndSeriesScreen.rout + "/{$it}")
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    "mediaList", movieState.topRatedSeriesList
+                )
+                navController.navigate(Screens.AllMovieAndSeriesScreen.rout)
+
             }
         )
 

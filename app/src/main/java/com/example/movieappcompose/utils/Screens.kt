@@ -9,5 +9,6 @@ sealed class Screens(val rout: String) {
     object PopularScreen : Screens("PopularScreen")
     object Details : Screens("details")
     object SearchScreen: Screens("search_screen")
+    object Favorite: Screens("favorite_screen")
 
 }

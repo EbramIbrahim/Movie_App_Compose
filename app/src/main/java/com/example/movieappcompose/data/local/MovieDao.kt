@@ -1,21 +1,23 @@
 package com.example.movieappcompose.data.local
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface MovieDao {
 
-    @Upsert
-    suspend fun insertMovie(movieEntity: List<MovieEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovie(movieEntity: MovieEntity)
 
 
-    @Query("SELECT * FROM MOVIE_TABLE WHERE category = :category")
-    fun getMoviesByCategory(category: String): List<MovieEntity>
+    @Query("SELECT * FROM MOVIE_TABLE WHERE isWatched = 1")
+    fun getWatchedMovies(): Flow<List<MovieEntity>>
 
 
-    @Query("SELECT * FROM MOVIE_TABLE WHERE id = :id")
-    fun getMoviesById(id: Int): MovieEntity
+    @Query("SELECT * FROM MOVIE_TABLE WHERE isFavorite = 1")
+    fun getFavoriteMovie(): Flow<List<MovieEntity>>
 }

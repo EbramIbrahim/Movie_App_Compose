@@ -76,6 +76,9 @@ fun SearchBarField(
             }
         },
     ) {
+
+
+
         if (searchState?.isLoading == true) {
             Box(modifier = Modifier.fillMaxSize()) {
                 LinearProgressIndicator(

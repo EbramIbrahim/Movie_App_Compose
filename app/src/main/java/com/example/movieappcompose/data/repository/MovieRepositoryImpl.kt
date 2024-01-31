@@ -1,18 +1,16 @@
 package com.example.movieappcompose.data.repository
 
 import com.example.movieappcompose.data.local.MovieDatabase
+import com.example.movieappcompose.data.local.MovieEntity
 import com.example.movieappcompose.data.mapper.toMedia
 import com.example.movieappcompose.data.remote.MovieApi
 import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.repository.MovieRepository
 import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.Resource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -21,7 +19,6 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
     private val movieDatabase: MovieDatabase
 ) : MovieRepository {
-
 
     override suspend fun getMovieList(
         category: String,
@@ -51,25 +48,6 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun getMovieListById(id: Int): Flow<Resource<Media>> {
-        return channelFlow {
-
-            withContext(Dispatchers.IO) {
-                send(Resource.Loading(true))
-
-
-                val movieDetails = movieDatabase.movieDao.getMoviesById(id)
-                val movieEntity = movieDetails.toMedia(movieDetails.category)
-
-
-                send(Resource.Success(movieEntity))
-
-                send(Resource.Loading(false))
-            }
-
-        }
-    }
 
     override suspend fun getTrendingMovieList(
         type: String,
@@ -197,13 +175,61 @@ class MovieRepositoryImpl @Inject constructor(
             }
 
 
-
             val media = fetchSimilarList.body()?.results?.map {
                 it.toMedia(it.media_type ?: "", category = it.category ?: "")
             }
 
             emit(Resource.Success(media))
         }
+    }
+
+
+    override fun getFavoriteMovie(): Flow<Resource<List<Media>>> {
+        return flow {
+            emit(Resource.Loading(true))
+            delay(500L)
+
+            val favoriteMovieList =
+                try {
+                    movieDatabase.movieDao.getFavoriteMovie()
+                } catch (e: Exception) {
+                    emit(Resource.Error(e.localizedMessage!!))
+                    return@flow
+                }
+
+            favoriteMovieList.collect {
+                emit(
+                    Resource.Success(it.map { media ->
+                        media.toMedia()
+                    })
+                )
+
+            }
+        }
+    }
+
+    override fun getWatchedMovie(): Flow<Resource<List<Media>>> {
+        return flow {
+            emit(Resource.Loading(true))
+            delay(500L)
+
+            val watchedMovieList =
+                try {
+                    movieDatabase.movieDao.getWatchedMovies()
+                } catch (e: Exception) {
+                    emit(Resource.Error(e.localizedMessage!!))
+                    return@flow
+                }
+
+            watchedMovieList.collect {
+                emit(Resource.Success(it.map { media -> media.toMedia() }))
+            }
+
+        }
+    }
+
+    override suspend fun upsertMovie(movieEntity: MovieEntity) {
+        movieDatabase.movieDao.insertMovie(movieEntity)
     }
 }
 

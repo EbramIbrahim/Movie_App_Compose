@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.presentation.common.Item
 import com.example.movieappcompose.presentation.state_event.MovieState
 import com.example.movieappcompose.utils.Constant
@@ -28,7 +29,7 @@ fun MovieScreenSection(
     type: String,
     movieState: MovieState,
     navController: NavController,
-    seeAll: (String) -> Unit
+    seeAll: () -> Unit
 ) {
 
 
@@ -77,7 +78,7 @@ fun MovieScreenSection(
             Text(
                 modifier = Modifier
                     .alpha(0.7f)
-                    .clickable { seeAll(type) },
+                    .clickable { seeAll() },
                 text = "See All",
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 14.sp,
@@ -86,7 +87,12 @@ fun MovieScreenSection(
         }
 
         LazyRow {
-            items(mediaList.size) {
+            items(
+                mediaList.size,
+                key =  {
+                    mediaList[it].id
+                }
+            ) {
                 var endPadding = 0.dp
 
                 if (it == mediaList.size - 1) {

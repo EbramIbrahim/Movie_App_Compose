@@ -1,9 +1,8 @@
 package com.example.movieappcompose.presentation.details_screen
 
-import androidx.compose.runtime.MutableState
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieappcompose.data.local.MovieEntity
 import com.example.movieappcompose.domain.repository.MovieRepository
 import com.example.movieappcompose.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +24,15 @@ class DetailsViewModel @Inject constructor(
     val movieDetails = _movieDetails.asStateFlow()
 
 
+
+
+    fun onEvent(event: DetailsEvent) {
+        when(event) {
+            is DetailsEvent.UpsertMovie -> {
+                upsertMovie(event.movieEntity)
+            }
+        }
+    }
 
      fun getMovieDetails(
         type: String,
@@ -48,10 +56,13 @@ class DetailsViewModel @Inject constructor(
                 }
             }
         }
-
-
-
     }
+    private fun upsertMovie(movieEntity: MovieEntity) {
+        viewModelScope.launch {
+            movieRepository.upsertMovie(movieEntity)
+        }
+    }
+
 
 }
 
