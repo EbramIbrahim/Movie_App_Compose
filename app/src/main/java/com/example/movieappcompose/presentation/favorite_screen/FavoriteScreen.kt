@@ -3,15 +3,13 @@ package com.example.movieappcompose.presentation.favorite_screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,45 +33,16 @@ fun FavoriteScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 32.dp, horizontal = 16.dp)
+            .padding(vertical = 32.dp)
             .statusBarsPadding(),
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Watch List",
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 20.sp,
-            )
-            Icon(
-                imageVector = Icons.Rounded.Star,
-                contentDescription = null,
-                tint = Color.Yellow
-            )
-
-        }
-
-        AutoSwipeImagePager(
-            mediaList = movieState.watchedMovieList,
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .height(200.dp),
-            navController = navController
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -82,7 +51,7 @@ fun FavoriteScreen(
                 fontSize = 20.sp,
             )
             Icon(
-                imageVector = Icons.Rounded.Favorite,
+                imageVector = Icons.Default.Favorite,
                 contentDescription = null,
                 tint = Color.Red
             )
@@ -96,10 +65,6 @@ fun FavoriteScreen(
                 .height(200.dp),
             navController = navController
         )
-
-
-        Spacer(modifier = Modifier.height(32.dp))
-
     }
 
 

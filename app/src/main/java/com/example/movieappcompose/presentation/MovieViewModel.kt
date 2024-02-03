@@ -42,16 +42,13 @@ class MovieViewModel @Inject constructor(
 //              getUpcomingMovieList(false)
                 getTrendingMovieList()
                 getTopRatedSeries()
-                getWatchedMovieList()
                 getFavoriteMovieList()
             }
 
             MovieEvent.GetFavoriteMovieList -> {
                 getFavoriteMovieList()
             }
-            MovieEvent.GetWatchedMovieList -> {
-                getWatchedMovieList()
-            }
+
         }
     }
 
@@ -173,7 +170,7 @@ class MovieViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         result.data?.let { media ->
-                            _movieState.update { it.copy(topRatedSeriesList = media.shuffled()) }
+                            _movieState.update { it.copy(topRatedSeriesList = media.shuffled(), isLoading = false) }
                         }
                     }
                 }
@@ -208,30 +205,6 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    private fun getWatchedMovieList() {
-        viewModelScope.launch {
-            repository.getWatchedMovie().collect { result ->
-                when(result) {
-                    is Resource.Error -> {
-                        _movieState.update { it.copy(error = result.message, isLoading = false) }
-                    }
-                    is Resource.Loading -> {
-                        _movieState.update { it.copy(isLoading = true) }
-                    }
-                    is Resource.Success -> {
-                        result.data?.let { watchedMovie ->
-                            _movieState.update {
-                                it.copy(
-                                    watchedMovieList = watchedMovie,
-                                    isLoading = false
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     override fun onCleared() {
         Log.d("viewModel", "View Model Cleared")

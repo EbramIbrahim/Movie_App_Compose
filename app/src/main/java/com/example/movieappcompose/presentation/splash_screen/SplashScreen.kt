@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -15,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.movieappcompose.R
-import com.example.movieappcompose.utils.Screens
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,7 +39,7 @@ fun SplashScreen(navController: NavController) {
         startAnimation = true
         delay(3000L)
         navController.popBackStack()
-        navController.navigate(Screens.Home.rout)
+        navController.navigate("Main_Root")
     }
 
     Splash(alpha = alphaAnimation.value)
@@ -63,8 +64,8 @@ fun Splash(alpha: Float) {
 
         Image(
             modifier = Modifier
-                .alpha(alpha = alpha),
-            painter = painterResource(id = R.drawable.splash_movie),
+                .alpha(alpha = alpha).size(70.dp),
+            painter = painterResource(id = R.drawable.movie),
             contentDescription = "splashMovie",
         )
 

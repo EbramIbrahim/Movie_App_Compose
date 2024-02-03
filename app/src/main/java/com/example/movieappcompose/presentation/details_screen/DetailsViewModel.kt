@@ -17,37 +17,42 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _movieDetails: MutableStateFlow<MovieDetailsState> =
         MutableStateFlow(MovieDetailsState())
     val movieDetails = _movieDetails.asStateFlow()
 
 
-
-
     fun onEvent(event: DetailsEvent) {
-        when(event) {
+        when (event) {
             is DetailsEvent.UpsertMovie -> {
                 upsertMovie(event.movieEntity)
             }
+
+            is DetailsEvent.DeleteMovie -> {
+                deleteMovie(event.movieEntity)
+            }
+
         }
     }
 
-     fun getMovieDetails(
+    fun getMovieDetails(
         type: String,
         id: Int,
         page: Int
     ) {
         viewModelScope.launch {
             movieRepository.getSimilarList(type, id, page).collectLatest { result ->
-                when(result) {
+                when (result) {
                     is Resource.Error -> {
                         _movieDetails.update { it.copy(isLoading = false, error = result.message) }
                     }
+
                     is Resource.Loading -> {
                         _movieDetails.update { it.copy(isLoading = true) }
                     }
+
                     is Resource.Success -> {
                         result.data?.let { movie ->
                             _movieDetails.update { it.copy(similarMovie = movie) }
@@ -57,13 +62,20 @@ class DetailsViewModel @Inject constructor(
             }
         }
     }
+
+
+
     private fun upsertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
             movieRepository.upsertMovie(movieEntity)
         }
     }
 
-
+    private fun deleteMovie(movieEntity: MovieEntity) {
+        viewModelScope.launch {
+            movieRepository.deleteMovie(movieEntity)
+        }
+    }
 }
 
 

@@ -17,9 +17,9 @@ interface MovieRepository {
 
     suspend fun upsertMovie(movieEntity: MovieEntity)
 
-     fun getFavoriteMovie(): Flow<Resource<List<Media>>>
+    suspend fun deleteMovie(movieEntity: MovieEntity)
 
-     fun getWatchedMovie(): Flow<Resource<List<Media>>>
+     fun getFavoriteMovie(): Flow<Resource<List<Media>>>
 
 
     suspend fun getTrendingMovieList(

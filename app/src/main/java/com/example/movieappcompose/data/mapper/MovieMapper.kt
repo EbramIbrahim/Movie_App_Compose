@@ -2,9 +2,7 @@ package com.example.movieappcompose.data.mapper
 
 import com.example.movieappcompose.data.local.MovieEntity
 import com.example.movieappcompose.data.remote.MediaDto
-import com.example.movieappcompose.data.remote.MovieDto
 import com.example.movieappcompose.domain.model.Media
-import com.example.movieappcompose.domain.model.Movie
 
 // from remote to local
 fun MediaDto.toMovieEntity(
@@ -135,10 +133,7 @@ fun MediaDto.toMedia(
     )
 }
 
-fun Media.toMovieEntity(
-    isFavorite: Boolean,
-    isWatched: Boolean,
-): MovieEntity {
+fun Media.toMovieEntity(): MovieEntity {
     return MovieEntity(
         adult = adult,
         backdropPath = backdropPath,
@@ -177,8 +172,8 @@ fun Media.toMovieEntity(
             "-1 -2"
         },
         tagline = tagline ?: "-1",
-        isWatched = isWatched,
-        isFavorite = isFavorite,
+        isWatched = false,
+        isFavorite = false,
         firstAirDate = ",",
         originalName = "",
         video = false

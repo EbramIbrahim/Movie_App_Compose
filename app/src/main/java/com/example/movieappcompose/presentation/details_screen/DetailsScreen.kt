@@ -1,7 +1,10 @@
 package com.example.movieappcompose.presentation.details_screen
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +20,12 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.rounded.ImageNotSupported
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -63,6 +70,7 @@ fun DetailsScreen(
 
     val viewModel = hiltViewModel<DetailsViewModel>()
     val similarList = viewModel.movieDetails.collectAsState().value
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
         mediaDetails?.let {
@@ -75,6 +83,14 @@ fun DetailsScreen(
     }
 
     mediaDetails?.let {
+        var isFavorite by remember { mutableStateOf(false) }
+        val itemKey = "item${mediaDetails.id}"
+        val sharedPreference: SharedPreferences = remember {
+            context.getSharedPreferences("_MyPref", Context.MODE_PRIVATE)
+        }
+        isFavorite = sharedPreference.getBoolean(itemKey, false)
+
+
         val mainImageState = rememberAsyncImagePainter(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(Constant.IMAGE_BASE_URL + mediaDetails.backdropPath)
@@ -148,25 +164,44 @@ fun DetailsScreen(
                     )
                 }
 
-                DetailsTopBar(
-                    onWatchedClicked = {
-                        viewModel.onEvent(DetailsEvent.UpsertMovie(
-                            mediaDetails.toMovieEntity(
-                                isWatched = true,
-                                isFavorite = false
+
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Transparent)
+                    .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            modifier = Modifier.size(22.dp),
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+
+                    IconButton(onClick = {
+                        if (isFavorite) {
+                            isFavorite = false
+                            sharedPreference.edit().putBoolean(itemKey, false).apply()
+                            viewModel.onEvent(DetailsEvent.DeleteMovie(mediaDetails.toMovieEntity()))
+                        } else {
+                            isFavorite = true
+                            sharedPreference.edit().putBoolean(itemKey, true).apply()
+                            viewModel.onEvent(
+                                DetailsEvent.UpsertMovie(mediaDetails.toMovieEntity())
                             )
-                        ))
-                    },
-                    onFavoriteClicked = {
-                        viewModel.onEvent(DetailsEvent.UpsertMovie(
-                            mediaDetails.toMovieEntity(
-                                isWatched = false,
-                                isFavorite = true
-                            )
-                        ))
-                    },
-                    onBackButtonClicked = { navController.navigateUp() },
-                )
+                        }
+                    }) {
+                        Icon(
+                            modifier = Modifier.size(22.dp),
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite ,
+                            contentDescription = null,
+                            tint = if (isFavorite) Color.Red else Color.White
+                        )
+                    }
+
+                }
                 // MainImageSection
 
                 Row(

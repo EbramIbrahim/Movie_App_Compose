@@ -1,5 +1,7 @@
 package com.example.movieappcompose.utils
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
+
 object Constant {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
@@ -13,10 +15,12 @@ object Constant {
     const val ALL = "all"
     const val trendingAllListScreen = "trendingAllListScreen"
     const val tvSeriesScreen = "tvSeriesScreen"
-    const val popularMovieScreen = "popularMovieScreen"
     const val TOP_RATED = "top_rated"
     const val SERIES_TYPE = "tv"
-    const val similarList = "similarList"
+    const val DATA_STORE_NAME = "favorite_watched_movie"
+
+    val readFavoriteMovie = booleanPreferencesKey(name = "favorite_movie")
+    val readWatchedMovie = booleanPreferencesKey(name = "watched_movie")
 
 
 }

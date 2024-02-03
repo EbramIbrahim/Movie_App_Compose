@@ -1,5 +1,11 @@
 package com.example.movieappcompose.data.repository
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.movieappcompose.data.local.MovieDatabase
 import com.example.movieappcompose.data.local.MovieEntity
 import com.example.movieappcompose.data.mapper.toMedia
@@ -8,16 +14,19 @@ import com.example.movieappcompose.domain.model.Media
 import com.example.movieappcompose.domain.repository.MovieRepository
 import com.example.movieappcompose.utils.Constant
 import com.example.movieappcompose.utils.Resource
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
-    private val movieDatabase: MovieDatabase
+    private val movieDatabase: MovieDatabase,
+    @ApplicationContext private val context: Context
 ) : MovieRepository {
 
     override suspend fun getMovieList(
@@ -208,31 +217,14 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getWatchedMovie(): Flow<Resource<List<Media>>> {
-        return flow {
-            emit(Resource.Loading(true))
-            delay(500L)
-
-            val watchedMovieList =
-                try {
-                    movieDatabase.movieDao.getWatchedMovies()
-                } catch (e: Exception) {
-                    emit(Resource.Error(e.localizedMessage!!))
-                    return@flow
-                }
-
-            watchedMovieList.collect {
-                emit(Resource.Success(it.map { media -> media.toMedia() }))
-            }
-
-        }
-    }
 
     override suspend fun upsertMovie(movieEntity: MovieEntity) {
         movieDatabase.movieDao.insertMovie(movieEntity)
     }
+
+    override suspend fun deleteMovie(movieEntity: MovieEntity) {
+        movieDatabase.movieDao.deleteMovie(movieEntity)
+    }
 }
-
-
 
 
