@@ -13,4 +13,16 @@ With this app you can get information about movies and TV series, watch trailer,
 - **Room:** *Room* is used for local data storage, providing a reliable and efficient way to manage app-related data.
 - **Kotin Coroutines** Asynchronious programming
 
-  
+  <table>
+  <tr>
+    <td>
+      <img src="https://github.com/EbramIbrahim/Movie_App_Compose/assets/104721363/f6d9b560-0456-4f59-8aff-5704fd310e21.jpg" width="250" height="500"/>
+    </td>
+    <td>
+      <img src="https://github.com/EbramIbrahim/Movie_App_Compose/assets/104721363/57b65b5f-9186-4a3b-ae0c-feb39beef3ac.jpg" width="250" height="500"/>
+    </td>
+    <td>
+      <img src="https://github.com/EbramIbrahim/Movie_App_Compose/assets/104721363/021cc26d-e26a-403c-a268-05b7cc6d3777.jpg" width="250" height="500"/>
+    </td>
+  </tr>
+</table>
